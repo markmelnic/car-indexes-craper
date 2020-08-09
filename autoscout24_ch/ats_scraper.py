@@ -11,11 +11,18 @@ MAKES_CONTAINER_ID = 'make'
 MODELS_CONTAINER_ID = 'model'
 
 def scraper():
+    try:
+        with open('makes.json') as json_file:
+            data = json.load(json_file)
+            json_file.close
+    except FileNotFoundError:
+        data = {}
+
     page = requests.get(URL, headers = HEADERS)
     soup = BeautifulSoup(page.content, 'html.parser')
-    
-    with open('makes.json', 'w') as makes_file:
-        data = {}
+
+    print(data)
+    with open('makes.json', 'w') as json_file:
         data[SET_NAME] = []
         for option in soup.find(id = MAKES_CONTAINER_ID):
             if option['value'] == '' or option['value'] < str(0):
@@ -24,7 +31,7 @@ def scraper():
             make['i'] = option['value']
             make['n'] = option.get_text().lower()
             data[SET_NAME].append(make)
-            
+
         for make in data[SET_NAME]:
             page = requests.get(URL + '?make=' + str(make['i']), headers = HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
@@ -38,5 +45,5 @@ def scraper():
                 model['m'] = option.get_text().lower().replace('\u00e9', '').replace('\u00a0', '')
                 make['models'].append(model)
 
-        json.dump(data, makes_file)
-        makes_file.close()
+        json.dump(data, json_file)
+        json_file.close()
