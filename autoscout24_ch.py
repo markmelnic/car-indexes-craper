@@ -1,14 +1,15 @@
 
 import json
+import time
 import requests
 from bs4 import BeautifulSoup
 
 HEADERS = {"User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebkit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36'}
 
-SET_NAME = 'mobile_de'
-URL = 'https://www.mobile.de/?vc=Car'
-MAKES_CONTAINER_ID = 'qsmakeBuy'
-MODELS_CONTAINER_ID = 'qsmodelBuy'
+SET_NAME = 'autoscout24_ch'
+URL = 'https://www.autoscout24.ch/de/'
+MAKES_CONTAINER_ID = 'make'
+MODELS_CONTAINER_ID = 'model'
 
 def scrape_makes():
     
@@ -44,9 +45,9 @@ def scrape_models():
 
     with open('makes.json', 'w') as json_file:
         for make in data[SET_NAME]:
-            page = requests.get(URL + '&mk=' + str(make['i']), headers = HEADERS)
+            page = requests.get(URL + '?make=' + str(make['i']), headers = HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
-
+            time.sleep(1)
             make['models'] = []
             for option in soup.find(id = MODELS_CONTAINER_ID):
                 if option['value'] == '' or option['value'] < str(0):

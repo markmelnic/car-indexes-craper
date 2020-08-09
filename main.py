@@ -1,11 +1,22 @@
 
-from mobile_de import mde_scraper
-from autoscout24_ch import ats_scraper
+import os
+import json
+import subprocess
+
+import mobile_de
+import autoscout24_ch
 
 
 if __name__ == '__main__':
+    
     try:
-        #ats_scraper.scrape_models()
-        mde_scraper.scrape_models()
+        #autoscout24_ch.scrape_makes()
+        #autoscout24_ch.scrape_models()
+        #mobile_de.scrape_makes()
+        mobile_de.scrape_models()
+        # check "models": []
     except KeyboardInterrupt:
         exit(0)
+    except json.decoder.JSONDecodeError:
+        os.remove('makes.json')
+        subprocess.run('python main.py')
