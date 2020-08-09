@@ -5,12 +5,13 @@ from bs4 import BeautifulSoup
 
 HEADERS = {"User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebkit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36'}
 
-SET_NAME = 'autoscout24_ch'
-URL = 'https://www.autoscout24.ch/de/'
-MAKES_CONTAINER_ID = 'make'
-MODELS_CONTAINER_ID = 'model'
+SET_NAME = 'mobile_de'
+URL = 'https://www.mobile.de/?vc=Car'
+MAKES_CONTAINER_ID = 'qsmakeBuy'
+MODELS_CONTAINER_ID = 'qsmodelBuy'
 
-def scraper():
+def scrape_makes():
+    
     try:
         with open('makes.json') as json_file:
             data = json.load(json_file)
@@ -21,7 +22,6 @@ def scraper():
     page = requests.get(URL, headers = HEADERS)
     soup = BeautifulSoup(page.content, 'html.parser')
 
-    print(data)
     with open('makes.json', 'w') as json_file:
         data[SET_NAME] = []
         for option in soup.find(id = MAKES_CONTAINER_ID):
@@ -32,8 +32,19 @@ def scraper():
             make['n'] = option.get_text().lower()
             data[SET_NAME].append(make)
 
+        json.dump(data, json_file)
+        json_file.close()
+
+
+def scrape_models():
+    
+    with open('makes.json') as json_file:
+            data = json.load(json_file)
+            json_file.close
+
+    with open('makes.json', 'w') as json_file:
         for make in data[SET_NAME]:
-            page = requests.get(URL + '?make=' + str(make['i']), headers = HEADERS)
+            page = requests.get(URL + '&mk=' + str(make['i']), headers = HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
 
             make['models'] = []
