@@ -5,6 +5,7 @@ import subprocess
 
 import mobile_de
 import autoscout24_ch
+import anibis_ch
 
 
 if __name__ == '__main__':
@@ -13,7 +14,8 @@ if __name__ == '__main__':
         #autoscout24_ch.scrape_makes()
         #autoscout24_ch.scrape_models()
         #mobile_de.scrape_makes()
-        mobile_de.scrape_models()
+        #mobile_de.scrape_models()
+        anibis_ch.scrape_makes()
         # check "models": []
     except KeyboardInterrupt:
         exit(0)
