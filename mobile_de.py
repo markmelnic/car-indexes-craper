@@ -1,7 +1,5 @@
 
-import json
-import time
-import requests
+import json, time, requests
 from bs4 import BeautifulSoup
 
 from selenium import webdriver
@@ -21,7 +19,6 @@ def scrape_makes():
     try:
         with open('makes.json') as json_file:
             data = json.load(json_file)
-            json_file.close
     except FileNotFoundError:
         data = {}
 
@@ -42,7 +39,6 @@ def scrape_makes():
             data[SET_NAME].append(make)
 
         json.dump(data, json_file)
-        json_file.close()
 
     dv.quit()
 
@@ -51,7 +47,6 @@ def scrape_models():
     
     with open('makes.json') as json_file:
             data = json.load(json_file)
-            json_file.close
 
     chrome_options = webdriver.ChromeOptions()
     dv = webdriver.Chrome(chrome_options = chrome_options, executable_path = "chromedriver.exe")
@@ -82,6 +77,5 @@ def scrape_models():
                     make['models'].append(model)
 
         json.dump(data, json_file)
-        json_file.close()
 
     dv.quit()
