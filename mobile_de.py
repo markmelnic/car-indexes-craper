@@ -1,5 +1,5 @@
 
-import json, time, requests
+import json, time
 from bs4 import BeautifulSoup
 
 from selenium import webdriver
@@ -12,10 +12,10 @@ MAKES_CONTAINER_ID = 'qsmakeBuy'
 MODELS_CONTAINER_ID = 'qsmodelBuy'
 
 def scrape_makes():
-    
+
     chrome_options = webdriver.ChromeOptions()
     dv = webdriver.Chrome(executable_path = "chromedriver.exe")
-    
+
     try:
         with open('makes.json') as json_file:
             data = json.load(json_file)
@@ -44,7 +44,7 @@ def scrape_makes():
 
 
 def scrape_models():
-    
+
     with open('makes.json') as json_file:
             data = json.load(json_file)
 
@@ -65,7 +65,7 @@ def scrape_models():
                 model['v'] = option.get_attribute('value')
                 model['m'] = option.text.lower().replace('\u00e9', '').replace('\u00a0', '')
                 make['models'].append(model)
-                
+
             if make['models'] == []:
                 options = dv.find_element_by_id(MODELS_CONTAINER_ID).find_elements_by_tag_name('option')
                 for option in options:
